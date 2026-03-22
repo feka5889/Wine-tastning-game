@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vintest Live</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Vintest · Live</p>
+      <h1>Vintest-middag</h1>
+    </div>
+    <div class="session-pill" id="session-pill">Ingen session</div>
+  </header>
+
+  <main class="app">
+    <section class="panel" id="landing">
+      <h2>Välj roll</h2>
+      <p class="muted">Alla spelare använder sin egen telefon. Värden visar resultatet på datorn.</p>
+      <div class="role-grid">
+        <button class="primary" id="host-btn">Jag är värd</button>
+        <button class="ghost" id="player-btn">Jag är spelare</button>
+      </div>
+      <div class="divider"></div>
+      <p class="small">Tips: Skapa en session som värd först, dela sedan koden.</p>
+    </section>
+
+    <section class="panel hidden" id="host-setup">
+      <div class="panel-header">
+        <h2>Värdpanel</h2>
+        <div>
+          <button class="ghost" id="new-session">Ny session</button>
+          <button class="ghost" id="end-session">Avsluta</button>
+        </div>
+      </div>
+
+      <div class="setup-grid">
+        <div class="card">
+          <h3>Session</h3>
+          <p class="muted">Dela koden med gästerna.</p>
+          <div class="code-box" id="session-code">----</div>
+          <label class="inline">
+            <span>Värdnamn</span>
+            <input type="text" id="host-name" placeholder="Ex. Felix" />
+          </label>
+        </div>
+
+        <div class="card">
+          <h3>Spelstatus</h3>
+          <p class="muted" id="status-text">Väntar på spelare...</p>
+          <div class="players" id="player-list"></div>
+        </div>
+      </div>
+
+      <div class="wine-grid" id="wine-grid"></div>
+
+      <div class="action-row">
+        <button class="primary" id="start-round">Starta provning</button>
+        <button class="ghost" id="reveal-results">Visa resultat</button>
+        <button class="ghost" id="next-wine">Nästa vin</button>
+      </div>
+
+      <div class="panel-sub">
+        <h3>Resultat & topplista</h3>
+        <div class="results" id="results"></div>
+        <div class="results stats-grid" id="stats"></div>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="player-join">
+      <h2>Anslut till session</h2>
+      <div class="form-grid">
+        <label>
+          <span>Namn</span>
+          <input type="text" id="player-name" placeholder="Ditt namn" />
+        </label>
+        <label>
+          <span>Sessionkod</span>
+          <input type="text" id="player-code" placeholder="AB12" />
+        </label>
+      </div>
+      <button class="primary" id="join-session">Gå med</button>
+    </section>
+
+    <section class="panel hidden" id="player-game">
+      <div class="panel-header">
+        <h2 id="player-wine-title">Vin 1</h2>
+        <div class="badge" id="round-badge">Väntar</div>
+      </div>
+
+      <div class="wine-tabs" id="wine-tabs">
+        <button class="tab active" data-wine="0" type="button">Vin 1</button>
+        <button class="tab" data-wine="1" type="button">Vin 2</button>
+        <button class="tab" data-wine="2" type="button">Vin 3</button>
+      </div>
+
+      <div class="card">
+        <h3>Gissa profilen</h3>
+        <div class="clock-grid">
+          <div class="clock" data-clock="fyllighet">
+            <p>Fyllighet</p>
+            <div class="dial" id="dial-fyllighet"></div>
+          </div>
+          <div class="clock" data-clock="stravhet">
+            <p>Strävhet</p>
+            <div class="dial" id="dial-stravhet"></div>
+          </div>
+          <div class="clock" data-clock="fruktsyra">
+            <p>Fruktsyra</p>
+            <div class="dial" id="dial-fruktsyra"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Doft & smak</h3>
+        <p class="muted">Välj flera.</p>
+        <div class="tag-grid" id="aroma-tags"></div>
+      </div>
+
+      <div class="card">
+        <h3>Ursprung</h3>
+        <div class="form-grid">
+          <label>
+            <span>Land</span>
+            <select id="guess-country">
+              <option value="">Välj land</option>
+            </select>
+          </label>
+          <label>
+            <span>Distrikt (klicka på kartan)</span>
+            <input type="text" id="guess-region" placeholder="Ex. Bordeaux" readonly />
+          </label>
+        </div>
+        <div class="map" id="map"></div>
+        <div class="region-info" id="region-info">Tryck på ett distrikt för att se stil och ledtrådar.</div>
+      </div>
+
+      <div class="card">
+        <h3>Egna intryck</h3>
+        <label>
+          <span>Anteckning</span>
+          <textarea id="wine-note" rows="4" placeholder="Skriv dina egna doft-, smak- eller matmatchningsanteckningar."></textarea>
+        </label>
+        <div class="rating-wrap">
+          <span>Hur mycket gillar du vinet?</span>
+          <div class="glass-rating">
+            <div class="glass-figure" id="wine-glass-figure" aria-hidden="true"></div>
+            <div class="glass-controls">
+              <input id="wine-rating" type="range" min="0" max="5" step="1" value="0" />
+              <div class="glass-value"><span id="wine-rating-value">0</span> / 5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="ghost" id="save-guess">Spara ändringar</button>
+        <button class="primary" id="submit-guess">Submit</button>
+      </div>
+      <div class="player-summary" id="player-summary"></div>
+
+      <div class="panel-sub hidden" id="player-leaderboard-wrap">
+        <h3>Leaderboard</h3>
+        <div class="results" id="player-results"></div>
+      </div>
+    </section>
+  </main>
+
+  <section class="panel hidden" id="config-panel">
+    <h2>Konfigurera online-sökning</h2>
+    <p class="muted">För att kunna hämta vininfo krävs en Firebase-konfiguration.</p>
+    <pre class="code" id="config-template"></pre>
+  </section>
+
+  <div class="modal hidden" id="submit-modal">
+    <div class="modal-card">
+      <h3>Bekräfta submit</h3>
+      <p class="muted">Är du säker? Efter submit kan du inte längre ändra dina svar.</p>
+      <div class="action-row">
+        <button class="ghost" id="cancel-submit">Avbryt</button>
+        <button class="primary" id="confirm-submit">Ja, submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
